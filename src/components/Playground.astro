@@ -1,0 +1,111 @@
+---
+// The three experiments. The markup here is the controls and empty charts;
+// playground.js draws experiments A and B, creative.js (inside the 3D scene) draws C.
+import { experiments } from '../content/story';
+const { data, logic, creative } = experiments;
+---
+<div class="experiments">
+  {/* ---------- A: Data in Motion ---------- */}
+  <article class="exp" id="exp-data" data-exp="data" data-sample={JSON.stringify(data.sample)} aria-labelledby="exp-data-h">
+    <header class="exp-head" data-reveal>
+      <p class="exp-label">{data.label}</p>
+      <h3 id="exp-data-h">{data.title}</h3>
+      <p class="exp-intro">{data.intro}</p>
+      <p class="exp-how"><span>How to use it</span> {data.how}</p>
+    </header>
+    <div class="exp-body" data-reveal>
+      <figure class="exp-view">
+        <svg class="chart" viewBox="0 0 600 340" role="img" aria-label="Chart of the demonstration data" data-chart></svg>
+        <figcaption class="exp-note">{data.note}</figcaption>
+      </figure>
+      <div class="exp-controls">
+        <fieldset class="values">
+          <legend>Sample values (0 to 100)</legend>
+          {data.sample.map((d, i) => (
+            <label><span>{d.label}</span><input type="number" min="0" max="100" step="1" value={d.value} inputmode="numeric" data-value={i} /></label>
+          ))}
+        </fieldset>
+        <div class="btn-row" role="group" aria-label="Chart type">
+          <button type="button" class="chip" data-mode="bars" aria-pressed="true">Bars</button>
+          <button type="button" class="chip" data-mode="line" aria-pressed="false">Line</button>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="chip" data-act="sort">Sort high to low</button>
+          <button type="button" class="chip" data-act="shuffle">Shuffle values</button>
+          <button type="button" class="chip reset" data-act="reset">Reset</button>
+        </div>
+        <dl class="readout" aria-live="polite">
+          <div><dt>Total</dt><dd data-out="total">0</dd></div>
+          <div><dt>Average</dt><dd data-out="mean">0</dd></div>
+          <div><dt>Highest</dt><dd data-out="max">0</dd></div>
+        </dl>
+      </div>
+    </div>
+    <p class="exp-shows" data-reveal><span>What it demonstrates</span> {data.shows}</p>
+  </article>
+
+  {/* ---------- B: The Logic Machine ---------- */}
+  <article class="exp" id="exp-logic" data-exp="logic" aria-labelledby="exp-logic-h">
+    <header class="exp-head" data-reveal>
+      <p class="exp-label">{logic.label}</p>
+      <h3 id="exp-logic-h">{logic.title}</h3>
+      <p class="exp-intro">{logic.intro}</p>
+      <p class="exp-how"><span>How to use it</span> {logic.how}</p>
+    </header>
+    <div class="exp-body" data-reveal>
+      <figure class="exp-view">
+        <svg class="chart plot" viewBox="0 0 600 380" role="img" aria-label="Scatter plot with a fitted line" data-plot></svg>
+        <figcaption class="exp-note">{logic.note} Points can also be moved with the arrow keys.</figcaption>
+      </figure>
+      <div class="exp-controls">
+        <label class="slider"><span>Underlying slope <output data-for="slope">0.60</output></span>
+          <input type="range" min="-1" max="1" step="0.05" value="0.6" data-param="slope" /></label>
+        <label class="slider"><span>Noise <output data-for="noise">1.0</output></span>
+          <input type="range" min="0" max="3" step="0.1" value="1" data-param="noise" /></label>
+        <label class="slider"><span>Number of points <output data-for="n">18</output></span>
+          <input type="range" min="5" max="40" step="1" value="18" data-param="n" /></label>
+        <label class="check"><input type="checkbox" data-param="residuals" checked /> <span>Show the residuals</span></label>
+        <div class="btn-row"><button type="button" class="chip reset" data-act="reset">Reset</button></div>
+        <dl class="readout" aria-live="polite">
+          <div class="wide"><dt>Fitted line</dt><dd data-out="equation">&ndash;</dd></div>
+          <div><dt>Slope</dt><dd data-out="b1">&ndash;</dd></div>
+          <div><dt>Intercept</dt><dd data-out="b0">&ndash;</dd></div>
+          <div><dt>R&sup2;</dt><dd data-out="r2">&ndash;</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="exp-shows" data-reveal>
+      <p><span>What it demonstrates</span> {logic.shows}</p>
+      <details class="case">
+        <summary><span class="when-closed">Show the logic</span><span class="when-open">Hide the logic</span></summary>
+        <div class="logic-text">{logic.logic.map((p) => <p>{p}</p>)}</div>
+      </details>
+    </div>
+  </article>
+
+  {/* ---------- C: The Creative Engine ---------- */}
+  <article class="exp" id="exp-creative" data-exp="creative" aria-labelledby="exp-creative-h">
+    <header class="exp-head" data-reveal>
+      <p class="exp-label">{creative.label}</p>
+      <h3 id="exp-creative-h">{creative.title}</h3>
+      <p class="exp-intro">{creative.intro}</p>
+      <p class="exp-how"><span>How to use it</span> {creative.how}</p>
+    </header>
+    <div class="exp-body" data-reveal>
+      <div class="exp-view">
+        <div class="anchor creative-anchor" data-3d="creative" aria-hidden="true"></div>
+        <p class="exp-note needs-3d">{creative.fallback}</p>
+      </div>
+      <div class="exp-controls">
+        <label class="slider"><span>Particle density <output data-for="density">2500</output></span>
+          <input type="range" min="300" max="6000" step="100" value="2500" data-param="density" /></label>
+        <label class="slider"><span>Movement speed <output data-for="speed">1.0</output></span>
+          <input type="range" min="0" max="2.5" step="0.1" value="1" data-param="speed" /></label>
+        <label class="slider"><span>Rotation <output data-for="rotation">0.3</output></span>
+          <input type="range" min="-1.5" max="1.5" step="0.1" value="0.3" data-param="rotation" /></label>
+        <div class="btn-row"><button type="button" class="chip reset" data-act="reset">Reset</button></div>
+      </div>
+    </div>
+    <p class="exp-shows" data-reveal><span>What it demonstrates</span> {creative.shows}</p>
+  </article>
+</div>

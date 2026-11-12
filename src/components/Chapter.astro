@@ -1,0 +1,23 @@
+---
+// One chapter of the story: kicker, big headline, paragraphs, and an optional visual beside them.
+// Slots: default = the visual, "text" = extra content under the paragraphs, "after" = full-width content below.
+const { chapter, flip = false } = Astro.props;
+const words = chapter.headline.split(' ');
+const hasViz = Astro.slots.has('default');
+const long = chapter.headline.length > 30;
+---
+<section class:list={['chapter', { flip, wide: !hasViz, long }]} id={chapter.id} data-section={chapter.section} aria-labelledby={`${chapter.id}-h`}>
+  <span class="ghost" aria-hidden="true">{chapter.number}</span>
+  <div class="chapter-grid">
+    <div class="chapter-text">
+      <p class="kicker" data-reveal>{chapter.number} / {chapter.name}</p>
+      <h2 id={`${chapter.id}-h`}>
+        {words.map((w: string) => (<><span class="w"><span>{w}</span></span>{' '}</>))}
+      </h2>
+      {chapter.body.map((p: string, i: number) => <p class:list={{ lede: i === 0 }} data-reveal>{p}</p>)}
+      <slot name="text" />
+    </div>
+    {hasViz && <div class="chapter-viz"><slot /></div>}
+  </div>
+  <slot name="after" />
+</section>

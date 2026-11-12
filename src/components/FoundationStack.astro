@@ -1,0 +1,9 @@
+---
+// Chapter 03 visual: layers lifting apart. Real work built on top of learning, built on top of curiosity.
+const layers = ['Curiosity', 'Computer + Software Engineering', 'Real-world work'];
+---
+<div class="stack" aria-hidden="true">
+  <div class="stack-inner">
+    {layers.map((label, i) => <div class="layer" data-layer={i} style={`--i:${i}`}><span>{label}</span></div>)}
+  </div>
+</div>

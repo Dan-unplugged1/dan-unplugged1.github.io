@@ -1,0 +1,17 @@
+---
+// Chapter 02 visual: a phone screen typing a little Python and CSS. Illustration only.
+const lines: [string, string][] = [
+  ['c', '# first_steps.py'],
+  ['', 'print("Hello, world")'],
+  ['', 'why = input("How does this work? ")'],
+  ['', ''],
+  ['c', '/* style.css */'],
+  ['', 'body {'],
+  ['k', '  background: #050706;'],
+  ['k', '  color: #3dffa2;'],
+  ['', '}'],
+];
+---
+<div class="phone" aria-hidden="true">
+  <pre class="code">{lines.map(([cls, text]) => <span class:list={['ln', cls]} data-type={text.length}>{text || ' '}</span>)}<span class="caret"></span></pre>
+</div>
